@@ -1,5 +1,5 @@
 import os
-from flask import Flask,render_template
+from flask import Flask
 
 def create_app():
     # 1. Creiamo l'istanza di Flask
@@ -14,30 +14,16 @@ def create_app():
         # 'dev' va bene per sviluppare, ma in produzione andrà cambiata.
         SECRET_KEY='dev',
         # Diciamo a Flask dove salvare il file del database SQLite
-        DATABASE=os.path.join(app.instance_path, 'blog.sqlite'),
+        DATABASE=os.path.join(app.instance_path, 'dati.sqlite'),
     )
 
-    # 3. Assicuriamoci che la cartella 'instance' esista fisicamente.
-    # Se non esiste (es. è la prima volta che avvii), Flask la crea.
-    try:
-        os.makedirs(app.instance_path)
-    except OSError:
-        pass
+    from . import setup_db
+    setup_db.init_app(app)
 
+    from . import home
+    app.register_blueprint(home.bp)
 
-    @app.route('/')
-    def hello():
-        title = "Pagina Principale"
-        message = "we"
-        name = "FABIO"
-        return render_template('home.html', title=title, message=message, name=name)
-        
+    from . import mostra_pagina
+    app.register_blueprint(mostra_pagina.bp)
 
-    @app.route('/pagina/<int:id>', methods=('GET',))
-    def mostra_pagina():
-        titolo = 
-        sottotitolo = 
-        testo = 
-        utente = 
-        return render_template('pagina.html',titolo,sottotitolo,testo,utente)
     return app

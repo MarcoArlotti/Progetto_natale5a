@@ -1,4 +1,4 @@
--- database: instance/dati.db
+-- database: app/instance
 CREATE TABLE IF NOT EXISTS utente (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
